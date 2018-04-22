@@ -18,25 +18,3 @@ if (syncManager.hasAutoBackup()) {
 } else {
 	Toast.makeText(this, R.string.no_backup, Toast.LENGTH_SHORT).show();
 }
-
-
-if (syncManager.hasAutoBackup()) {
-	Observable.create((ObservableOnSubscribe<Boolean>) emitter -> {
-		boolean result = syncManager.autoRestore();
-		emitter.onNext(result);
-		emitter.onComplete();
-	}).subscribeOn(Schedulers.single())
-			.observeOn(AndroidSchedulers.mainThread())
-			.subscribe(result -> {
-				if (result) {
-					homeAfterRestore();
-				} else {
-					Toast.makeText(this, R.string.restore_record_toast_fail, Toast.LENGTH_SHORT).show();
-				}
-			}, e -> e.printStackTrace());
-
-} else if(syncManager.hasLocalBackup()) {
-	syncManager.localRestore();
-} else {
-	Toast.makeText(this, R.string.no_backup, Toast.LENGTH_SHORT).show();
-}
